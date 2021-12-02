@@ -32,7 +32,17 @@ def read_atom(reader):
     if token[0].isdigit() and re.match(FLOAT_REGEX, token):
         return tp.MalNumber(float(token))
     else:
-        return tp.MalSymbol(token)
+        match token:
+            case "nil":
+                return tp.MalNil()
+            case "true":
+                return tp.MalTrue()
+            case "false":
+                return tp.MalFalse()
+            case _:
+                if token[0] == token[-1] == '"':
+                    return tp.MalString(token)
+                return tp.MalSymbol(token)
 
 
 def read_form(reader):

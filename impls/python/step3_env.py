@@ -3,9 +3,10 @@ import readline
 import reader as rdr
 import printer as pr
 import mtypes as tp
+import env
 
 # Repl environment
-REPL_ENV = {'+': lambda a: mal_sum(a),
+Base_functions = {'+': lambda a: mal_sum(a),
             '-': lambda a: mal_diff(a),
             '*': lambda a: mal_prod(a),
             '/': lambda a: mal_div(a)}
@@ -63,8 +64,8 @@ def eval_ast(ast, repl_env):
         # symbol
         case 3:
             val = ast.value()
-            if val in repl_env.keys():
-                return repl_env[ast.value()]
+            if repl_env.find(val):
+                return repl_env.get(val)
             else:
                 print("Undefined symbol", val)
                 exit()
@@ -83,9 +84,30 @@ def READ(input):
 def EVAL(ast, repl_env):
     if ast.typ() == 1:
         if ast.nempty():
-            val_ast = eval_ast(ast, repl_env)
-            fn = val_ast.pop(0)
-            return fn(val_ast)
+            felem = ast.value()[0]
+            match felem.value():
+                case "def!":
+                    if felem.typ() == 3:
+                        return repl_env.set(ast.value()[1], EVAL(ast.value()[2], repl_env))
+                    else:
+                        print("Error typ def!")
+                        exit()
+                case "let*":
+                    if felem.typ() == 3:
+                        new_env = env.Env(repl_env)
+                        bindings = ast.value()[1]
+                        if len(bindings.value()) % 2 == 1:
+                            print("Bindings list not even length")
+                            exit()
+                        while bindings.nempty():
+                            new_key = bindings.pop_first()
+                            new_val = bindings.pop_first()
+                            new_env.set(new_key.value(), EVAL(new_val, new_env))
+                        return EVAL(ast.value()[2], new_env)
+                case _:
+                    val_ast = eval_ast(ast, repl_env)
+                    fn = val_ast.pop(0)
+                    return fn(val_ast)
         else:
             return ast
     else:
@@ -98,7 +120,10 @@ def PRINT(input):
 
 
 def rep(input):
-    return PRINT(EVAL(READ(input), REPL_ENV))
+    repl_env = env.Env()
+    for i in Base_functions.keys():
+        repl_env.set(i, Base_functions[i])
+    return PRINT(EVAL(READ(input), repl_env))
 
 
 def main():

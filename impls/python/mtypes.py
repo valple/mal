@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 class Mal:
     mtype = 0
+    val = 0
 
     def value(self):
-        pass
+        return self.val
 
     def typ(self):
         return self.mtype
@@ -44,18 +45,18 @@ class MalNumber(Mal):
 
 
 class MalSymbol(Mal):
-    symbol = ""
+    val = ""
 
     def __init__(self, symbol=""):
-        self.symbol = symbol
+        self.val = symbol
         self.mtype = 3
 
     def value(self):
-        return self.symbol
+        return self.val
 
 
 class MalString(Mal):
-    val = ""
+    val = '""'
 
     def __init__(self, input=""):
         self.val = input
@@ -63,6 +64,39 @@ class MalString(Mal):
 
     def value(self):
         return self.val
+
+
+class MalNil(Mal):
+    val = "nil"
+
+    def __init__(self):
+        self.mtype = 5
+
+
+class MalBool(Mal):
+    val = ""
+
+    def __init__(self):
+        self.mtype = 6
+
+    def value(self):
+        return self.val
+
+
+class MalTrue(MalBool):
+    val = "true"
+
+    def __init__(self):
+        self.val = "true"
+        self.mtype = 6
+
+
+class MalFalse(MalBool):
+    val = "false"
+
+    def __init__(self):
+        self.val = "false"
+        self.mtype = 6
 
 
 class MalKeyword(Mal):

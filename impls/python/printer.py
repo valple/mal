@@ -2,9 +2,15 @@
 import types as tp
 
 
-def pr_str(mal):
+def pr_str(mal, print_readably=True):
     output = ""
     match mal.typ():
+        case 6:
+            return mal.value()
+        case 5:
+            return mal.value()
+        case 4:
+            return mal.value()
         case 3:
             return mal.value()
         case 2:
