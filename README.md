@@ -1,3 +1,11 @@
+# Fork of mal - Make a Lisp
+Implementations planned in C++ and Python.
+
+Current progress:
+* C++ step1 done
+* Python upto step4 done but not completely tested
+
+<!--
 # mal - Make a Lisp
 
 [![Build Status](https://travis-ci.org/kanaka/mal.svg?branch=master)](https://travis-ci.org/kanaka/mal)
@@ -1442,3 +1450,4 @@ make "docker-build^IMPL"
 
 Mal (make-a-lisp) is licensed under the MPL 2.0 (Mozilla Public
 License 2.0). See LICENSE.txt for more details.
+--->
